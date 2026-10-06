@@ -767,4 +767,240 @@ document.addEventListener('DOMContentLoaded', () => {
     obs.observe(el);
   });
 
+  // --- 5. PRESENTER SYSTEM & PROJECTOR DISPLAY CONTROLS ---
+  const presenter = {
+    slides: ['top', 'era-1', 'era-2', 'era-3', 'era-4', 'era-5', 'era-6'],
+    currentIndex: 0,
+    isActive: false,
+    isLaser: false,
+    isContrast: false,
+    isBlackout: false,
+    timerInterval: null,
+    secondsElapsed: 0,
+
+    init() {
+      // Elements
+      const presentBtn = document.getElementById('present-btn');
+      const hudExit = document.getElementById('hud-exit');
+      const hudPrev = document.getElementById('hud-prev');
+      const hudNext = document.getElementById('hud-next');
+      const hudLaser = document.getElementById('hud-laser');
+      const hudContrast = document.getElementById('hud-contrast');
+      const hudBlackout = document.getElementById('hud-blackout');
+      const hudHelp = document.getElementById('hud-help');
+      const blackoutScreen = document.getElementById('blackout-screen');
+      const laserPointer = document.getElementById('laser-pointer');
+      const shortcutsModal = document.getElementById('shortcuts-modal');
+      const shortcutsClose = document.getElementById('shortcuts-close');
+
+      if (!presentBtn) return;
+
+      // Event Listeners
+      presentBtn.addEventListener('click', () => this.togglePresentation());
+      hudExit.addEventListener('click', () => this.togglePresentation(false));
+      hudPrev.addEventListener('click', () => this.prevSlide());
+      hudNext.addEventListener('click', () => this.nextSlide());
+      hudLaser.addEventListener('click', () => this.toggleLaser());
+      hudContrast.addEventListener('click', () => this.toggleContrast());
+      hudBlackout.addEventListener('click', () => this.toggleBlackout());
+      blackoutScreen.addEventListener('click', () => this.toggleBlackout(false));
+      
+      hudHelp.addEventListener('click', () => {
+        if (shortcutsModal.open) shortcutsModal.close();
+        else shortcutsModal.showModal();
+      });
+      shortcutsClose.addEventListener('click', () => shortcutsModal.close());
+      shortcutsModal.addEventListener('click', (e) => {
+        if (e.target === shortcutsModal) shortcutsModal.close();
+      });
+
+      // Laser Pointer Movement
+      window.addEventListener('mousemove', (e) => {
+        if (this.isLaser) {
+          laserPointer.style.left = `${e.clientX}px`;
+          laserPointer.style.top = `${e.clientY}px`;
+        }
+      });
+
+      // Global Keyboard Shortcuts
+      window.addEventListener('keydown', (e) => {
+        // Ignore if user is inside an input/textarea
+        if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+        // Blackout exit with any key if active
+        if (this.isBlackout && (e.key === 'b' || e.key === 'B' || e.key === 'Escape' || e.key === ' ')) {
+          e.preventDefault();
+          this.toggleBlackout(false);
+          return;
+        }
+
+        switch (e.key) {
+          case 'p':
+          case 'P':
+            e.preventDefault();
+            this.togglePresentation();
+            break;
+
+          case 'f':
+          case 'F':
+            e.preventDefault();
+            this.toggleFullscreen();
+            break;
+
+          case 'b':
+          case 'B':
+          case '.':
+            e.preventDefault();
+            this.toggleBlackout();
+            break;
+
+          case 'l':
+          case 'L':
+            e.preventDefault();
+            this.toggleLaser();
+            break;
+
+          case 'c':
+          case 'C':
+            e.preventDefault();
+            this.toggleContrast();
+            break;
+
+          case 'm':
+          case 'M':
+            e.preventDefault();
+            audio.toggle();
+            break;
+
+          case '?':
+            e.preventDefault();
+            if (shortcutsModal.open) shortcutsModal.close();
+            else shortcutsModal.showModal();
+            break;
+
+          case 'Escape':
+            if (shortcutsModal.open) shortcutsModal.close();
+            else if (this.isLaser) this.toggleLaser(false);
+            else if (this.isActive) this.togglePresentation(false);
+            break;
+
+          case 'ArrowRight':
+          case 'PageDown':
+          case ' ':
+            // In Era V, advance milestone first if not finished
+            if (document.body.dataset.era === '5') {
+              const uRange = document.getElementById('unif-range');
+              if (uRange && parseInt(uRange.value) < parseInt(uRange.max)) {
+                e.preventDefault();
+                document.getElementById('unif-next').click();
+                return;
+              }
+            }
+            e.preventDefault();
+            this.nextSlide();
+            break;
+
+          case 'ArrowLeft':
+          case 'PageUp':
+            // In Era V, rewind milestone if not at start
+            if (document.body.dataset.era === '5') {
+              const uRange = document.getElementById('unif-range');
+              if (uRange && parseInt(uRange.value) > 0) {
+                e.preventDefault();
+                document.getElementById('unif-prev').click();
+                return;
+              }
+            }
+            e.preventDefault();
+            this.prevSlide();
+            break;
+        }
+      });
+    },
+
+    togglePresentation(force) {
+      this.isActive = typeof force === 'boolean' ? force : !this.isActive;
+      document.body.classList.toggle('presentation-mode', this.isActive);
+      
+      const presentBtn = document.getElementById('present-btn');
+      presentBtn.setAttribute('aria-pressed', this.isActive);
+      presentBtn.classList.toggle('active', this.isActive);
+
+      if (this.isActive) {
+        // Start presentation timer
+        if (!this.timerInterval) {
+          this.secondsElapsed = 0;
+          this.timerInterval = setInterval(() => {
+            this.secondsElapsed++;
+            const m = String(Math.floor(this.secondsElapsed / 60)).padStart(2, '0');
+            const s = String(this.secondsElapsed % 60).padStart(2, '0');
+            document.getElementById('hud-timer').textContent = `${m}:${s}`;
+          }, 1000);
+        }
+        // Auto sync slide index to current view
+        this.syncSlideFromScroll();
+      } else {
+        clearInterval(this.timerInterval);
+        this.timerInterval = null;
+        this.toggleLaser(false);
+      }
+    },
+
+    toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    },
+
+    toggleLaser(force) {
+      this.isLaser = typeof force === 'boolean' ? force : !this.isLaser;
+      document.body.classList.toggle('laser-active', this.isLaser);
+      document.getElementById('hud-laser').setAttribute('aria-pressed', this.isLaser);
+    },
+
+    toggleContrast(force) {
+      this.isContrast = typeof force === 'boolean' ? force : !this.isContrast;
+      document.body.classList.toggle('projector-contrast', this.isContrast);
+      document.getElementById('hud-contrast').setAttribute('aria-pressed', this.isContrast);
+    },
+
+    toggleBlackout(force) {
+      this.isBlackout = typeof force === 'boolean' ? force : !this.isBlackout;
+      document.getElementById('blackout-screen').classList.toggle('show', this.isBlackout);
+    },
+
+    syncSlideFromScroll() {
+      const eraNum = parseInt(document.body.dataset.era || '0');
+      this.currentIndex = Math.min(Math.max(eraNum, 0), this.slides.length - 1);
+      document.getElementById('hud-slide-indicator').textContent = `${this.currentIndex + 1} / ${this.slides.length}`;
+    },
+
+    goToSlide(index) {
+      this.currentIndex = Math.min(Math.max(index, 0), this.slides.length - 1);
+      const targetId = this.slides[this.currentIndex];
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('hud-slide-indicator').textContent = `${this.currentIndex + 1} / ${this.slides.length}`;
+      }
+    },
+
+    nextSlide() {
+      if (this.currentIndex < this.slides.length - 1) {
+        this.goToSlide(this.currentIndex + 1);
+      }
+    },
+
+    prevSlide() {
+      if (this.currentIndex > 0) {
+        this.goToSlide(this.currentIndex - 1);
+      }
+    }
+  };
+
+  presenter.init();
+
 });
+

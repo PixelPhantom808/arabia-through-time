@@ -74,6 +74,12 @@
       </nav>
 
       <div class="flex items-center gap-2">
+        <!-- Presentation Mode Quick Toggle -->
+        <button id="present-btn" class="present-badge-btn" title="Toggle Presentation Mode (Key: P)" aria-pressed="false">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <span class="hidden sm:inline">Present</span>
+        </button>
+
         <div class="audio-ctl">
           <button id="audio-toggle" class="audio-btn" aria-pressed="false" aria-label="Toggle ambient sound">
             <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
@@ -135,7 +141,7 @@
         <p class="kicker reveal">An Interactive Museum Exhibit</p>
         <p class="font-arabic text-3xl md:text-5xl text-gold/90 mb-2 reveal" style="--d:.15s" lang="ar" dir="rtl">رحلة عبر الزمن</p>
         <h1 class="hero-title" data-split>Sands of Time</h1>
-        <p class="hero-sub reveal" style="--d:.5s">Three thousand years of the Arabian Peninsula — from incense caravans and desert poets to the cities of tomorrow. Scroll to travel through time.</p>
+        <p class="hero-sub reveal" style="--d:.5s">Three millennia across the Arabian sands — from frankincense caravans and nomadic bards to neon-lit skylines. Scroll down to traverse the tides of time.</p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center mt-10 reveal" style="--d:.7s">
           <button id="start-sound" class="btn-gold">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9v6h4l5 4V5L8 9H4z" /><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" /></svg>
@@ -398,7 +404,7 @@
           <p class="era-kicker reveal"><span>Era V</span>1902 – 1938</p>
           <h2 class="era-title" data-split>The Great Unification</h2>
           <p class="era-arabic reveal" lang="ar" dir="rtl">ملحمة التوحيد</p>
-          <p class="era-intro reveal">In the winter of 1902, a young Abdulaziz bin Abdulrahman Al Saud rode out of exile in Kuwait with a small band of companions. Over the next three decades he would forge a kingdom from rival regions — and in 1938, the desert gave up a secret that would change the world. Step through the archive below; the film slowly regains its colour.</p>
+          <p class="era-intro reveal">In the chill of winter 1902, an exiled Abdulaziz bin Abdulrahman Al Saud swept across the dunes with forty daring companions to reclaim Masmak Fortress. Across three relentless decades, he fused fractured provinces into a sovereign realm—until 1938, when the desert yielded a discovery that reshaped modern history. Step through the archive below; the film slowly regains its colour.</p>
         </header>
 
         <div id="unif-module" class="unif-module reveal" style="--sepia:1">
@@ -497,21 +503,36 @@
           <p class="era-kicker reveal"><span>Era VI</span>1938 – 2030</p>
           <h2 class="era-title" data-split>Vision 2030</h2>
           <p class="era-arabic reveal" lang="ar" dir="rtl">رؤية المملكة ٢٠٣٠</p>
-          <p class="era-intro reveal">From oil wells to giga-projects. After decades of transformation powered by energy, the Kingdom launched Vision 2030 in 2016 — a blueprint to diversify the economy, open to the world, and build places that have never existed before.</p>
+          <div class="era-intro reveal spotlight-container">
+            <ul class="space-y-3 max-w-3xl mx-auto text-left list-none pt-2">
+              <li class="flex items-start gap-3 p-3 rounded-xl bg-ink/40 border border-neon-cyan/20 spotlight-item">
+                <span class="text-neon-cyan text-lg mt-0.5">✦</span>
+                <div><b class="text-sand-50">Diversify the Horizon:</b> Charting a bold departure from hydrocarbon dependency toward innovation, renewable power, and global commerce.</div>
+              </li>
+              <li class="flex items-start gap-3 p-3 rounded-xl bg-ink/40 border border-neon-green/20 spotlight-item">
+                <span class="text-neon-green text-lg mt-0.5">✦</span>
+                <div><b class="text-sand-50">Open to the World:</b> Welcoming international travelers, reviving ancient heritage corridors, and celebrating cultural exchange.</div>
+              </li>
+              <li class="flex items-start gap-3 p-3 rounded-xl bg-ink/40 border border-neon-pink/20 spotlight-item">
+                <span class="text-neon-pink text-lg mt-0.5">✦</span>
+                <div><b class="text-sand-50">Pioneer the Future:</b> Erecting cognitive mega-cities and living laboratories like NEOM that redefine human possibility.</div>
+              </li>
+            </ul>
+          </div>
         </header>
 
-        <div class="grid md:grid-cols-3 gap-5 mt-14">
-          <article class="neon-card reveal" style="--accent:#00f0ff">
+        <div class="grid md:grid-cols-3 gap-5 mt-14 spotlight-container">
+          <article class="neon-card reveal spotlight-item" style="--accent:#00f0ff">
             <span class="neon-num">01</span>
             <h3>A Vibrant Society</h3>
             <p>Culture, heritage, entertainment and sport — from AlUla's ancient valleys to Riyadh Season.</p>
           </article>
-          <article class="neon-card reveal" style="--d:.12s;--accent:#00ff9c">
+          <article class="neon-card reveal spotlight-item" style="--d:.12s;--accent:#00ff9c">
             <span class="neon-num">02</span>
             <h3>A Thriving Economy</h3>
             <p>Growing non-oil sectors such as tourism, technology, mining and logistics to reduce reliance on hydrocarbons.</p>
           </article>
-          <article class="neon-card reveal" style="--d:.24s;--accent:#ff2bd6">
+          <article class="neon-card reveal spotlight-item" style="--d:.24s;--accent:#ff2bd6">
             <span class="neon-num">03</span>
             <h3>An Ambitious Nation</h3>
             <p>Effective, transparent government and an engaged citizenry building the Kingdom's next chapter.</p>
@@ -555,6 +576,103 @@
       <p class="mt-12 text-xs text-sand-300/50 leading-relaxed">Maps are stylised and approximate, for illustration only. Ambient soundscapes are synthesised live in your browser with the Web Audio API. Photography via Unsplash. Built with HTML, Tailwind CSS and vanilla JavaScript.</p>
     </div>
   </footer>
+
+  <!-- ============ PRESENTER CONTROLS & OVERLAYS ============ -->
+  <!-- 1. Presenter Floating HUD -->
+  <aside id="presenter-hud" class="presenter-hud" aria-label="Presenter Controls" role="region">
+    <div class="hud-inner">
+      <div class="hud-left">
+        <span class="hud-badge">PRESENTER MODE</span>
+        <span id="hud-timer" class="hud-timer font-type" title="Elapsed presentation time">00:00</span>
+      </div>
+
+      <div class="hud-nav">
+        <button id="hud-prev" class="hud-btn" title="Previous Slide (← or PageUp)" aria-label="Previous Slide">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <span id="hud-slide-indicator" class="hud-slide-indicator font-mono">1 / 7</span>
+        <button id="hud-next" class="hud-btn" title="Next Slide (→ or Space or PageDown)" aria-label="Next Slide">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+
+      <div class="hud-actions">
+        <button id="hud-laser" class="hud-btn" title="Toggle Virtual Laser Pointer (Key: L)" aria-pressed="false" aria-label="Laser Pointer">
+          <span class="laser-dot-icon"></span>
+          <span class="hidden md:inline text-xs">Laser</span>
+        </button>
+        <button id="hud-contrast" class="hud-btn" title="Projector High-Contrast Mode (Key: C)" aria-pressed="false" aria-label="High Contrast">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M12 3a9 9 0 0 1 0 18"/></svg>
+          <span class="hidden md:inline text-xs">Contrast</span>
+        </button>
+        <button id="hud-blackout" class="hud-btn" title="Black Screen / Pause (Key: B)" aria-label="Blackout Screen">
+          <span class="hud-key-cap">B</span>
+          <span class="hidden md:inline text-xs">Blank</span>
+        </button>
+        <button id="hud-help" class="hud-btn" title="Shortcuts Guide (Key: ?)" aria-label="Shortcuts">
+          <span class="hud-key-cap">?</span>
+        </button>
+        <button id="hud-exit" class="hud-btn danger" title="Exit Presentation Mode (Key: Esc or P)" aria-label="Exit Presenter Mode">
+          ✕
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 2. Virtual Laser Pointer -->
+  <div id="laser-pointer" class="laser-pointer" aria-hidden="true"></div>
+
+  <!-- 3. Screen Blackout Overlay -->
+  <div id="blackout-screen" class="blackout-screen" aria-hidden="true">
+    <div class="blackout-hint font-mono">Screen paused. Press <kbd>B</kbd> or click to resume.</div>
+  </div>
+
+  <!-- 4. Keyboard Shortcuts Modal -->
+  <dialog id="shortcuts-modal" class="shortcuts-modal">
+    <div class="shortcuts-content">
+      <div class="flex items-center justify-between border-b border-sand-500/20 pb-3 mb-4">
+        <h3 class="font-display text-lg text-gold flex items-center gap-2">
+          <span>⌨</span> Presenter Keyboard Shortcuts
+        </h3>
+        <button id="shortcuts-close" class="text-sand-300 hover:text-white text-lg">✕</button>
+      </div>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <div class="flex items-center justify-between p-2 rounded bg-ink/60 border border-sand-500/10">
+          <span class="text-sand-200">Next Slide / Milestone</span>
+          <kbd class="hud-kbd">Space</kbd> / <kbd class="hud-kbd">→</kbd>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded bg-ink/60 border border-sand-500/10">
+          <span class="text-sand-200">Previous Slide</span>
+          <kbd class="hud-kbd">←</kbd> / <kbd class="hud-kbd">PageUp</kbd>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded bg-ink/60 border border-sand-500/10">
+          <span class="text-sand-200">Toggle Presenter Mode</span>
+          <kbd class="hud-kbd">P</kbd>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded bg-ink/60 border border-sand-500/10">
+          <span class="text-sand-200">Fullscreen</span>
+          <kbd class="hud-kbd">F</kbd>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded bg-ink/60 border border-sand-500/10">
+          <span class="text-sand-200">Blank / Pause Screen</span>
+          <kbd class="hud-kbd">B</kbd>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded bg-ink/60 border border-sand-500/10">
+          <span class="text-sand-200">Virtual Laser Pointer</span>
+          <kbd class="hud-kbd">L</kbd>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded bg-ink/60 border border-sand-500/10">
+          <span class="text-sand-200">Projector High-Contrast</span>
+          <kbd class="hud-kbd">C</kbd>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded bg-ink/60 border border-sand-500/10">
+          <span class="text-sand-200">Toggle Ambient Sound</span>
+          <kbd class="hud-kbd">M</kbd>
+        </div>
+      </div>
+      <p class="text-xs text-sand-400/70 mt-4 text-center">Optimized for classroom presentation on Apple Keynote / clicker remotes.</p>
+    </div>
+  </dialog>
 
   <script src="script.js" defer></script>
 </body>

@@ -605,3 +605,190 @@ body { overflow-x: hidden; }
   .reveal, .reveal-left, .reveal-right, .reveal-zoom, [data-split] .char { opacity: 1; transform: none; filter: none; }
   [data-parallax] { transform: none !important; }
 }
+
+/* ==========================================================================
+   PRESENTER SYSTEM & PROJECTOR DISPLAY SUITE
+   ========================================================================== */
+
+/* Header Present Badge */
+.present-badge-btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .35rem .75rem; border-radius: 999px;
+  background: rgba(var(--accent-rgb), .15); border: 1px solid rgba(var(--accent-rgb), .4);
+  color: var(--accent); font-size: .78rem; font-weight: 600; letter-spacing: .05em;
+  transition: all .25s var(--ease-out); cursor: pointer;
+}
+.present-badge-btn:hover, .present-badge-btn[aria-pressed="true"] {
+  background: var(--accent); color: #0b0906; box-shadow: 0 0 16px rgba(var(--accent-rgb), .6);
+}
+
+/* 1. Presentation Mode Layout */
+body.presentation-mode {
+  --header-h: 0px;
+}
+body.presentation-mode #site-header {
+  transform: translateY(-100%); pointer-events: none; opacity: 0;
+}
+body.presentation-mode #era-rail,
+body.presentation-mode #chrono {
+  opacity: 0.15; transition: opacity .3s;
+}
+body.presentation-mode #era-rail:hover,
+body.presentation-mode #chrono:hover {
+  opacity: 1;
+}
+body.presentation-mode .presenter-hud {
+  transform: translateY(0); opacity: 1; pointer-events: auto;
+}
+
+/* 2. Floating Presenter HUD */
+.presenter-hud {
+  position: fixed; inset: auto 0 1.5rem 0; z-index: 900;
+  display: flex; justify-content: center; pointer-events: none;
+  transform: translateY(140%); opacity: 0; transition: transform .4s var(--ease-out), opacity .4s;
+}
+.hud-inner {
+  display: flex; align-items: center; gap: 1rem;
+  padding: .55rem 1.1rem; border-radius: 999px;
+  background: rgba(12, 10, 8, .88);
+  border: 1px solid rgba(var(--accent-rgb), .35);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, .8), 0 0 24px rgba(var(--accent-rgb), .2);
+}
+.hud-left { display: flex; align-items: center; gap: .7rem; }
+.hud-badge {
+  font-size: .65rem; font-weight: 700; letter-spacing: .15em;
+  padding: .2rem .5rem; border-radius: 4px;
+  background: var(--accent); color: #0b0906;
+}
+.hud-timer { font-size: .88rem; color: #fff; letter-spacing: .08em; }
+.hud-nav { display: flex; align-items: center; gap: .4rem; border-inline: 1px solid rgba(255, 255, 255, .12); padding-inline: .7rem; }
+.hud-slide-indicator { font-size: .82rem; color: rgba(255, 255, 255, .8); min-width: 42px; text-align: center; }
+.hud-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .35rem;
+  padding: .4rem .65rem; border-radius: 999px; font-size: .78rem; font-weight: 500;
+  background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .12);
+  color: #fff; cursor: pointer; transition: all .2s;
+}
+.hud-btn:hover { background: rgba(var(--accent-rgb), .2); border-color: var(--accent); color: var(--accent); }
+.hud-btn[aria-pressed="true"] { background: var(--accent); color: #0b0906; border-color: var(--accent); }
+.hud-btn.danger:hover { background: rgba(255, 60, 60, .3); border-color: #ff4d4d; color: #ff6666; }
+.hud-actions { display: flex; align-items: center; gap: .4rem; }
+.laser-dot-icon { width: 8px; height: 8px; border-radius: 50%; background: #ff2a5f; box-shadow: 0 0 8px #ff2a5f; }
+.hud-key-cap {
+  font-family: monospace; font-size: .75rem; background: rgba(255, 255, 255, .15);
+  padding: .1rem .35rem; border-radius: 3px;
+}
+.hud-kbd {
+  font-family: monospace; font-size: .75rem; background: rgba(255, 255, 255, .12);
+  border: 1px solid rgba(255, 255, 255, .2); padding: .15rem .4rem; border-radius: 4px; color: #fff;
+}
+
+/* 3. Projector High-Contrast Mode */
+body.projector-contrast {
+  font-size: 18px;
+}
+body.projector-contrast .hero-sub,
+body.projector-contrast .era-intro {
+  font-size: 1.35rem !important; line-height: 1.8 !important; color: #ffffff !important;
+}
+body.projector-contrast .era-shade {
+  background: rgba(3, 2, 1, .88) !important;
+}
+body.projector-contrast .map-frame,
+body.projector-contrast .neon-card,
+body.projector-contrast .unif-module,
+body.projector-contrast .golden-shelf {
+  border-width: 2px !important;
+  border-color: rgba(255, 255, 255, .35) !important;
+  background: rgba(4, 3, 2, .92) !important;
+  box-shadow: 0 0 35px rgba(0, 0, 0, .9) !important;
+}
+body.projector-contrast p,
+body.projector-contrast span,
+body.projector-contrast li {
+  color: #ffffff !important;
+}
+body.projector-contrast .kicker,
+body.projector-contrast .era-kicker,
+body.projector-contrast .font-type,
+body.projector-contrast .meta {
+  color: #ffe082 !important;
+  font-weight: 700 !important;
+}
+body.projector-contrast .land {
+  fill: #1c2333 !important;
+  stroke: #ffffff !important;
+  stroke-width: 2.5px !important;
+}
+
+/* 4. Audience Focus & Progressive Spotlight Mode */
+.spotlight-container {
+  transition: opacity .3s;
+}
+.spotlight-item {
+  transition: opacity .35s var(--ease-out), transform .35s var(--ease-out), filter .35s, box-shadow .35s;
+  cursor: pointer;
+}
+.spotlight-container:hover .spotlight-item:not(:hover) {
+  opacity: .32; filter: blur(1.2px); transform: scale(.98);
+}
+.spotlight-item:hover, .spotlight-item.active {
+  opacity: 1 !important; filter: none !important; transform: scale(1.02);
+  box-shadow: 0 0 30px rgba(var(--accent-rgb), .35);
+  border-color: var(--accent) !important;
+}
+
+/* 5. Virtual Laser Pointer */
+.laser-pointer {
+  position: fixed; top: 0; left: 0; z-index: 10000;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #ff2a5f;
+  box-shadow: 0 0 14px 4px #ff2a5f, 0 0 32px 8px rgba(255, 42, 95, .8);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+body.laser-active {
+  cursor: none !important;
+}
+body.laser-active * {
+  cursor: none !important;
+}
+body.laser-active .laser-pointer {
+  display: block;
+}
+
+/* 6. Screen Blackout Overlay */
+.blackout-screen {
+  position: fixed; inset: 0; z-index: 99999;
+  background: #000; display: none;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.blackout-screen.show {
+  display: flex;
+}
+.blackout-hint {
+  color: rgba(255, 255, 255, .3); font-size: .88rem;
+  padding: .6rem 1.2rem; border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .1);
+}
+.blackout-hint kbd {
+  background: rgba(255, 255, 255, .2); padding: .2rem .5rem; border-radius: 4px; color: #fff;
+}
+
+/* 7. Keyboard Shortcuts Modal */
+.shortcuts-modal {
+  border: 1px solid rgba(var(--accent-rgb), .4); border-radius: 1rem;
+  background: rgba(12, 10, 8, .96); color: #fff;
+  padding: 1.5rem; max-width: 540px; width: 90vw;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .9), 0 0 30px rgba(var(--accent-rgb), .25);
+  backdrop-filter: blur(20px);
+  margin: auto;
+}
+.shortcuts-modal::backdrop {
+  background: rgba(0, 0, 0, .75); backdrop-filter: blur(6px);
+}
+
