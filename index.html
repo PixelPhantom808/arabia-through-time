@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Sands of Time — A Journey Through the History of the Arabian Peninsula</title>
+  <meta name="description" content="An interactive museum exhibit: scroll through 3,000 years of Arabian Peninsula history — from incense caravans and the dawn of Islam to the Great Unification and Vision 2030." />
+  <meta name="theme-color" content="#0b0906" />
+  <meta property="og:title" content="Sands of Time — Arabian Peninsula Through the Ages" />
+  <meta property="og:description" content="Scroll through time in an immersive, interactive museum exhibit." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23e9b65a' stroke-width='8'%3E%3Crect x='22' y='22' width='56' height='56'/%3E%3Crect x='22' y='22' width='56' height='56' transform='rotate(45 50 50)'/%3E%3C/g%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://images.unsplash.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@400;600;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind (Play CDN — zero build step, deploys as-is to GitHub Pages / Vercel) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Cinzel', 'serif'],
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            arabic: ['Amiri', 'serif'],
+            type: ['"Special Elite"', 'Courier New', 'monospace'],
+            future: ['"Space Grotesk"', 'Inter', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            ink: '#0b0906',
+            sand: { 50: '#fbf6ec', 100: '#f3e7cf', 200: '#e8d3a8', 300: '#dcb877', 400: '#cf9c4c', 500: '#b98235', 600: '#93652a', 700: '#6b4a20', 800: '#3d2a13', 900: '#1f150a' },
+            gold: '#e9b65a',
+            lapis: '#1d3a7a',
+            mud: '#b0652f',
+            neon: { cyan: '#00f0ff', green: '#00ff9c', pink: '#ff2bd6' },
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="bg-ink text-sand-100 font-sans antialiased" data-era="0">
+  <a href="#era-1" class="skip-link">Skip to the journey</a>
+
+  <!-- Scroll progress -->
+  <div id="progress-bar" aria-hidden="true"></div>
+
+  <!-- ============ HEADER ============ -->
+  <header id="site-header">
+    <div class="mx-auto flex items-center justify-between gap-3 px-4 md:px-8 h-16 max-w-[1600px]">
+      <a href="#top" class="flex items-center gap-3 shrink-0" aria-label="Back to the beginning">
+        <svg class="logo-star" viewBox="0 0 100 100" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="6">
+            <rect x="24" y="24" width="52" height="52" />
+            <rect x="24" y="24" width="52" height="52" transform="rotate(45 50 50)" />
+            <circle cx="50" cy="50" r="9" />
+          </g>
+        </svg>
+        <span class="font-display tracking-[0.28em] text-xs sm:text-sm">SANDS&nbsp;OF&nbsp;TIME</span>
+      </a>
+
+      <nav id="desktop-nav" class="hidden xl:flex items-center gap-1" aria-label="Eras">
+        <a href="#era-1" class="nav-link" data-nav="1"><b>I</b>Jāhiliyyah</a>
+        <a href="#era-2" class="nav-link" data-nav="2"><b>II</b>Dawn of Islam</a>
+        <a href="#era-3" class="nav-link" data-nav="3"><b>III</b>Empires</a>
+        <a href="#era-4" class="nav-link" data-nav="4"><b>IV</b>Saudi States</a>
+        <a href="#era-5" class="nav-link" data-nav="5"><b>V</b>Unification</a>
+        <a href="#era-6" class="nav-link" data-nav="6"><b>VI</b>Vision 2030</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <div class="audio-ctl">
+          <button id="audio-toggle" class="audio-btn" aria-pressed="false" aria-label="Toggle ambient sound">
+            <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <span id="audio-label" class="hidden sm:inline">Sound off</span>
+          </button>
+          <input id="audio-volume" class="vol hidden md:block" type="range" min="0" max="100" value="60" aria-label="Ambient volume" />
+        </div>
+        <button id="menu-toggle" class="menu-btn xl:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open era menu">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10" /></svg>
+        </button>
+      </div>
+    </div>
+    <nav id="mobile-menu" class="xl:hidden" aria-label="Eras (mobile)">
+      <a href="#era-1" data-nav="1"><b>I</b>Pre-Islamic Arabia<small>c. 1000 BCE – 609</small></a>
+      <a href="#era-2" data-nav="2"><b>II</b>Dawn of Islam &amp; Rashidun<small>610 – 661</small></a>
+      <a href="#era-3" data-nav="3"><b>III</b>Umayyad &amp; Abbasid<small>661 – 1258</small></a>
+      <a href="#era-4" data-nav="4"><b>IV</b>Early Saudi States<small>1727 – 1891</small></a>
+      <a href="#era-5" data-nav="5"><b>V</b>The Great Unification<small>1902 – 1938</small></a>
+      <a href="#era-6" data-nav="6"><b>VI</b>Modern Saudi Arabia<small>1938 – 2030</small></a>
+    </nav>
+  </header>
+
+  <!-- Side timeline rail -->
+  <nav id="era-rail" aria-label="Timeline">
+    <button data-target="top" data-label="Prologue"><span></span></button>
+    <button data-target="era-1" data-label="Pre-Islamic"><span></span></button>
+    <button data-target="era-2" data-label="Dawn of Islam"><span></span></button>
+    <button data-target="era-3" data-label="Islamic Empires"><span></span></button>
+    <button data-target="era-4" data-label="Saudi States"><span></span></button>
+    <button data-target="era-5" data-label="Unification"><span></span></button>
+    <button data-target="era-6" data-label="Vision 2030"><span></span></button>
+  </nav>
+
+  <!-- Chronometer -->
+  <div id="chrono" aria-hidden="true">
+    <div class="chrono-ring"></div>
+    <div class="chrono-label">Year</div>
+    <div id="chrono-year">∞</div>
+    <div id="chrono-era">Prologue</div>
+  </div>
+
+  <!-- Sound toast -->
+  <div id="sound-toast" role="status" aria-live="polite"></div>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section id="top" class="hero" data-era="0" data-sound="wind" data-name="Prologue">
+      <div class="era-bg" data-parallax="0.35"><div class="bg-img" data-bg="night"></div></div>
+      <div id="stars" class="stars" aria-hidden="true"></div>
+      <div class="hero-moon" data-parallax="0.2" aria-hidden="true"></div>
+      <svg class="dune dune-back" data-parallax="0.18" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true"><path d="M0,210 C180,150 360,250 620,190 C860,135 1080,230 1260,170 C1340,145 1400,160 1440,170 L1440,320 L0,320 Z" /></svg>
+      <svg class="dune dune-mid" data-parallax="0.1" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true"><path d="M0,250 C220,190 420,280 700,230 C980,180 1180,270 1440,220 L1440,320 L0,320 Z" /></svg>
+      <div class="caravan" aria-hidden="true">
+        <svg viewBox="0 0 420 60"><g fill="currentColor"><path d="M10 50c4-14 10-20 18-20 4-8 10-10 14-6 4-2 8 2 7 6l-4 6c6 0 10 6 10 14h-4l-2-8-4 8h-4l2-10c-4 2-12 2-18 0l-2 10h-4l1-10-6 10z"/><path d="M100 50c4-14 10-20 18-20 4-8 10-10 14-6 4-2 8 2 7 6l-4 6c6 0 10 6 10 14h-4l-2-8-4 8h-4l2-10c-4 2-12 2-18 0l-2 10h-4l1-10-6 10z"/><path d="M190 50c4-14 10-20 18-20 4-8 10-10 14-6 4-2 8 2 7 6l-4 6c6 0 10 6 10 14h-4l-2-8-4 8h-4l2-10c-4 2-12 2-18 0l-2 10h-4l1-10-6 10z"/><circle cx="82" cy="34" r="4"/><path d="M78 38h8l2 14h-3l-2-8-2 8h-3z"/></g></svg>
+      </div>
+      <svg class="dune dune-front" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true"><path d="M0,280 C260,230 520,300 820,262 C1100,228 1280,290 1440,265 L1440,320 L0,320 Z" /></svg>
+
+      <div class="relative z-10 text-center px-6 max-w-4xl mx-auto pt-16">
+        <p class="kicker reveal">An Interactive Museum Exhibit</p>
+        <p class="font-arabic text-3xl md:text-5xl text-gold/90 mb-2 reveal" style="--d:.15s" lang="ar" dir="rtl">رحلة عبر الزمن</p>
+        <h1 class="hero-title" data-split>Sands of Time</h1>
+        <p class="hero-sub reveal" style="--d:.5s">Three thousand years of the Arabian Peninsula — from incense caravans and desert poets to the cities of tomorrow. Scroll to travel through time.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center mt-10 reveal" style="--d:.7s">
+          <button id="start-sound" class="btn-gold">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9v6h4l5 4V5L8 9H4z" /><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" /></svg>
+            Begin with sound
+          </button>
+          <a href="#era-1" class="btn-ghost">Begin in silence</a>
+        </div>
+      </div>
+      <a href="#era-1" class="scroll-cue" aria-label="Scroll to the first era">
+        <span>Scroll through time</span>
+        <i></i>
+      </a>
+    </section>
+
+    <!-- ============ ERA I — PRE-ISLAMIC ============ -->
+    <section id="era-1" class="era era-pre" data-era="1" data-from="-1000" data-to="609" data-sound="caravan" data-name="Pre-Islamic Arabia">
+      <div class="era-bg" data-parallax="0.3"><div class="bg-img" data-bg="dunes"></div></div>
+      <div class="era-shade"></div>
+      <div class="dust" data-dust="26" aria-hidden="true"></div>
+      <div class="era-bignum" data-parallax="-0.12" aria-hidden="true">1000 BCE</div>
+
+      <div class="era-content">
+        <header class="era-head">
+          <p class="era-kicker reveal"><span>Era I</span>c. 1000 BCE – 609 CE</p>
+          <h2 class="era-title" data-split>The Age of Incense &amp; Verse</h2>
+          <p class="era-arabic reveal" lang="ar" dir="rtl">عصر ما قبل الإسلام · الجاهلية</p>
+          <p class="era-intro reveal">Long before empires rose, the peninsula was an ocean of sand crossed by camel caravans. Frankincense and myrrh from the south flowed north to Petra, Gaza and Rome, while in the seasonal markets of the Hejaz, poets competed for glory with words said to be sharper than swords.</p>
+        </header>
+
+        <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start mt-14">
+          <div class="lg:col-span-5 space-y-5">
+            <article class="card card-sand reveal-left">
+              <span class="card-tag">Trade</span>
+              <h3>The Frankincense Road</h3>
+              <p>Resins harvested in Dhofar and Hadramawt travelled more than 2,000&nbsp;km by caravan to the Mediterranean. Oases along the route grew wealthy by offering water, protection and markets.</p>
+            </article>
+            <article class="card card-sand reveal-left" style="--d:.12s">
+              <span class="card-tag">Kingdoms</span>
+              <h3>Saba, Kindah &amp; the Nabataeans</h3>
+              <p>The Sabaeans engineered the great dam of Ma'rib; the Kindah ruled from Qaryat al-Faw; and the Nabataeans carved monumental tombs at Hegra and Petra.</p>
+            </article>
+            <article class="card card-sand reveal-left" style="--d:.24s">
+              <span class="card-tag">Poetry</span>
+              <h3>The Suspended Odes</h3>
+              <p>Oral poetry was the archive of Arabian life. By tradition, the finest poems — the <em>Mu'allaqāt</em> — were honoured by being hung upon the Kaaba in Mecca.</p>
+              <blockquote class="font-serif italic text-sand-200/90 mt-3 border-l-2 border-sand-400/50 pl-3">“Halt, my two friends, and let us weep for the memory of a beloved and an abode…”<span class="block not-italic text-xs mt-1 text-sand-300/70">— opening of the Mu'allaqa of Imru' al-Qays</span></blockquote>
+            </article>
+            <figure class="photo-card reveal-left" style="--d:.36s">
+              <div class="bg-img" data-bg="petra" data-bg-w="900"></div>
+              <figcaption>Nabataean rock-cut architecture — a legacy of the caravan kingdoms.</figcaption>
+            </figure>
+          </div>
+
+          <div class="lg:col-span-7 lg:sticky lg:top-24">
+            <div class="map-frame map-frame-sand reveal-zoom">
+              <div class="map-frame-head">
+                <span>Caravan Routes · c. 1st century CE</span>
+                <span class="legend"><i class="lg-route"></i>Incense road <i class="lg-dot"></i>Sites</span>
+              </div>
+              <div class="map-mount" data-map="pre"></div>
+              <div class="map-info" data-map-info="pre">
+                <p class="map-hint">✦ Tap a glowing site to explore early settlements, kingdoms and poetry markets.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ERA II — DAWN OF ISLAM ============ -->
+    <section id="era-2" class="era era-dawn" data-era="2" data-from="610" data-to="661" data-sound="sacred" data-name="Dawn of Islam">
+      <div class="era-bg" data-parallax="0.3"><div class="bg-img" data-bg="kaaba"></div></div>
+      <div class="era-shade"></div>
+      <div class="light-rays" aria-hidden="true"></div>
+      <div class="era-bignum" data-parallax="-0.12" aria-hidden="true">610</div>
+
+      <div class="era-content">
+        <header class="era-head">
+          <p class="era-kicker reveal"><span>Era II</span>610 – 661 CE</p>
+          <h2 class="era-title" data-split>The Light from Mecca</h2>
+          <p class="era-arabic reveal" lang="ar" dir="rtl">فجر الإسلام والخلافة الراشدة</p>
+          <p class="era-intro reveal">In 610&nbsp;CE, in the Cave of Hira above Mecca, the revelation of the Qur'an began. Within a single generation, a peninsula of rival tribes was united by one faith — and from Medina, the message spread across three continents.</p>
+        </header>
+
+        <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start mt-14">
+          <div class="lg:col-span-7 order-2 lg:order-1">
+            <div class="map-frame map-frame-emerald reveal-zoom">
+              <div class="map-frame-head">
+                <span>The Spread of the Message</span>
+                <span class="legend"><i class="lg-glow"></i>Reach <i class="lg-route"></i>Expansion</span>
+              </div>
+              <div class="map-mount" data-map="dawn"></div>
+              <div class="map-info" data-map-info="dawn">
+                <p class="map-hint">✦ Drag the slider to watch the light expand from Mecca and Medina.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 order-1 lg:order-2 space-y-6">
+            <div class="spread-panel reveal-right">
+              <div class="flex items-baseline justify-between gap-4">
+                <div id="spread-year" class="spread-year">610</div>
+                <div id="spread-hijri" class="text-emerald-200/70 text-sm text-right"></div>
+              </div>
+              <h3 id="spread-title" class="spread-title">The First Revelation</h3>
+              <p id="spread-text" class="spread-text"></p>
+              <label for="spread-range" class="sr-only">Year of expansion</label>
+              <input id="spread-range" class="range range-emerald" type="range" min="0" max="10" value="0" step="1" />
+              <div id="spread-ticks" class="ticks"></div>
+              <div class="flex gap-2 mt-4">
+                <button class="chip" id="spread-play" aria-pressed="false">▶ Play</button>
+              </div>
+            </div>
+
+            <div class="reveal-right" style="--d:.15s">
+              <p class="text-xs uppercase tracking-[0.3em] text-emerald-200/70 mb-3">The Rightly Guided Caliphs</p>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="caliph"><span lang="ar">أبو بكر الصديق</span><b>Abu Bakr</b><small>632 – 634</small></div>
+                <div class="caliph"><span lang="ar">عمر بن الخطاب</span><b>Umar</b><small>634 – 644</small></div>
+                <div class="caliph"><span lang="ar">عثمان بن عفان</span><b>Uthman</b><small>644 – 656</small></div>
+                <div class="caliph"><span lang="ar">علي بن أبي طالب</span><b>Ali</b><small>656 – 661</small></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ERA III — UMAYYAD & ABBASID ============ -->
+    <section id="era-3" class="era era-empire" data-era="3" data-from="661" data-to="1258" data-sound="souq" data-name="Islamic Empires">
+      <div class="era-bg" data-parallax="0.3"><div class="bg-img" data-bg="arches"></div></div>
+      <div class="era-shade"></div>
+      <div class="geo-pattern" data-parallax="0.08" aria-hidden="true"></div>
+      <div class="era-bignum" data-parallax="-0.12" aria-hidden="true">750</div>
+
+      <div class="era-content">
+        <header class="era-head">
+          <div class="arch-ornament reveal" aria-hidden="true"></div>
+          <p class="era-kicker reveal"><span>Era III</span>661 – 1258 CE</p>
+          <h2 class="era-title" data-split>Arches of the Golden Age</h2>
+          <p class="era-arabic reveal" lang="ar" dir="rtl">الدولتان الأموية والعباسية</p>
+          <p class="era-intro reveal">As the caliphate's capital moved to Damascus and then Baghdad, the peninsula became the spiritual heart of a civilisation stretching from al-Andalus to Central Asia. Pilgrim roads converged on Mecca and Medina, while in great cities scholars, architects and physicians lit a golden age of learning.</p>
+        </header>
+
+        <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start mt-14">
+          <div class="lg:col-span-7">
+            <div class="map-frame map-frame-lapis reveal-zoom">
+              <div class="map-frame-head">
+                <span>Capitals &amp; Pilgrim Roads</span>
+                <div class="seg" role="tablist" aria-label="Dynasty">
+                  <button class="seg-btn active" data-dynasty="umayyad" role="tab" aria-selected="true">Umayyad</button>
+                  <button class="seg-btn" data-dynasty="abbasid" role="tab" aria-selected="false">Abbasid</button>
+                </div>
+              </div>
+              <div class="map-mount" data-map="empire"></div>
+              <div class="map-info" data-map-info="empire">
+                <p class="map-hint">✦ Switch dynasties to see the capital shift — and tap cities and roads for details.</p>
+              </div>
+            </div>
+          </div>
+          <div class="lg:col-span-5 space-y-6">
+            <figure class="arch-frame reveal-right">
+              <div class="bg-img" data-bg="mosque" data-bg-w="900"></div>
+              <figcaption>Horseshoe arches, muqarnas and geometry: the visual language of the empires.</figcaption>
+            </figure>
+            <div id="dynasty-card" class="arch-card reveal-right" style="--d:.15s"></div>
+          </div>
+        </div>
+
+        <!-- Golden Age Timeline -->
+        <div class="mt-20 reveal">
+          <div class="flex items-end justify-between gap-4 mb-6">
+            <div>
+              <p class="text-xs uppercase tracking-[0.3em] text-gold/80">Interactive Timeline</p>
+              <h3 class="font-display text-2xl md:text-3xl text-sand-50 mt-1">Milestones of Science &amp; Culture</h3>
+            </div>
+            <div class="hidden sm:flex gap-2">
+              <button class="round-btn" id="golden-prev" aria-label="Previous milestone">‹</button>
+              <button class="round-btn" id="golden-next" aria-label="Next milestone">›</button>
+            </div>
+          </div>
+          <div class="golden-wrap">
+            <div id="golden-track" class="golden-track" role="tablist" aria-label="Golden age milestones"></div>
+          </div>
+          <article id="golden-detail" class="golden-detail" aria-live="polite"></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ERA IV — EARLY SAUDI STATES ============ -->
+    <section id="era-4" class="era era-mud" data-era="4" data-from="1727" data-to="1891" data-sound="oasis" data-name="Early Saudi States">
+      <div class="najdi-crenel top" aria-hidden="true"></div>
+      <div class="era-bg" data-parallax="0.3"><div class="bg-img" data-bg="desert"></div></div>
+      <div class="era-shade"></div>
+      <div class="mud-texture" aria-hidden="true"></div>
+      <div class="era-bignum" data-parallax="-0.12" aria-hidden="true">1727</div>
+
+      <div class="era-content">
+        <header class="era-head">
+          <p class="era-kicker reveal"><span>Era IV</span>1727 – 1891</p>
+          <h2 class="era-title" data-split>Walls of Mud, Roots of a Nation</h2>
+          <p class="era-arabic reveal" lang="ar" dir="rtl">الدولة السعودية الأولى والثانية</p>
+          <p class="era-intro reveal">On the banks of Wadi Hanifa, in the oasis of Diriyah, a new state was born in 1727. From the sun-baked mud-brick palaces of at-Turaif, the House of Saud brought much of the peninsula under one rule — fell — and rose again.</p>
+        </header>
+
+        <div class="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start mt-14">
+          <div class="lg:col-span-4 reveal-left">
+            <p class="text-xs uppercase tracking-[0.3em] text-orange-200/70 mb-3">Build the wall — tap a brick</p>
+            <div id="brick-wall" class="brick-wall" role="tablist" aria-label="Saudi state milestones"></div>
+          </div>
+          <div class="lg:col-span-8 space-y-6">
+            <div class="map-frame map-frame-mud reveal-zoom">
+              <div class="map-frame-head">
+                <span id="mud-map-title">Territory</span>
+                <div class="seg" role="tablist" aria-label="State">
+                  <button class="seg-btn active" data-state="1" role="tab" aria-selected="true">First State</button>
+                  <button class="seg-btn" data-state="2" role="tab" aria-selected="false">Second State</button>
+                </div>
+              </div>
+              <div class="grid md:grid-cols-5">
+                <div class="md:col-span-3"><div class="map-mount" data-map="mud"></div></div>
+                <div id="brick-detail" class="brick-detail md:col-span-2" aria-live="polite"></div>
+              </div>
+              <div class="map-info" data-map-info="mud"><p class="map-hint">✦ Tap Diriyah, Riyadh and other sites on the map.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="turaif mt-16 reveal">
+          <div class="turaif-windows" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="grid md:grid-cols-3 gap-6 relative">
+            <div>
+              <h4>At-Turaif District</h4>
+              <p>The citadel of Diriyah — a maze of adobe palaces, mosques and homes — was inscribed as a UNESCO World Heritage Site in 2010.</p>
+            </div>
+            <div>
+              <h4>Najdi Architecture</h4>
+              <p>Thick mud-brick walls kept interiors cool; triangular vents and stepped crenellations crowned buildings, while palm trunks and fronds formed the ceilings.</p>
+            </div>
+            <div>
+              <h4>Founding Day · 22 February</h4>
+              <p>Since 2022, Saudi Arabia marks Founding Day to commemorate Imam Muhammad bin Saud's establishment of the First Saudi State in 1727.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="najdi-crenel bottom" aria-hidden="true"></div>
+    </section>
+
+    <!-- ============ ERA V — THE GREAT UNIFICATION (FOCAL) ============ -->
+    <section id="era-5" class="era era-unif" data-era="5" data-from="1902" data-to="1938" data-sound="archive" data-name="The Great Unification">
+      <div class="unif-wash" aria-hidden="true"></div>
+      <div class="film-grain" aria-hidden="true"></div>
+      <div class="film-scratches" aria-hidden="true"></div>
+      <div class="era-bignum" data-parallax="-0.12" aria-hidden="true">1902</div>
+
+      <div class="era-content">
+        <header class="era-head">
+          <p class="focal-badge reveal">★ Focal Exhibit · Gallery V</p>
+          <p class="era-kicker reveal"><span>Era V</span>1902 – 1938</p>
+          <h2 class="era-title" data-split>The Great Unification</h2>
+          <p class="era-arabic reveal" lang="ar" dir="rtl">ملحمة التوحيد</p>
+          <p class="era-intro reveal">In the winter of 1902, a young Abdulaziz bin Abdulrahman Al Saud rode out of exile in Kuwait with a small band of companions. Over the next three decades he would forge a kingdom from rival regions — and in 1938, the desert gave up a secret that would change the world. Step through the archive below; the film slowly regains its colour.</p>
+        </header>
+
+        <div id="unif-module" class="unif-module reveal" style="--sepia:1">
+          <div class="unif-topbar">
+            <span class="font-type">ARCHIVE · REEL <b id="unif-reel">01</b> / <b id="unif-total">12</b></span>
+            <div class="flex items-center gap-2">
+              <button id="unif-play" class="unif-btn" aria-pressed="false">▶ Auto-play</button>
+            </div>
+          </div>
+
+          <div class="grid lg:grid-cols-12 gap-0">
+            <!-- Archival photo -->
+            <div class="lg:col-span-4 unif-photo-col">
+              <figure class="archival-frame">
+                <div class="unif-photo">
+                  <div class="bg-img unif-ph a" aria-hidden="true"></div>
+                  <div class="bg-img unif-ph b" aria-hidden="true"></div>
+                  <div id="unif-emblem" class="unif-emblem" aria-hidden="true"></div>
+                  <div class="photo-vignette"></div>
+                </div>
+                <figcaption id="unif-caption" class="font-type">Riyadh, 1902</figcaption>
+                <span class="tape tl"></span><span class="tape tr"></span>
+              </figure>
+              <div class="unif-stat">
+                <div id="unif-stat-num" class="font-type">~40</div>
+                <div id="unif-stat-label">companions</div>
+              </div>
+            </div>
+
+            <!-- Story -->
+            <div class="lg:col-span-4 unif-story" aria-live="polite">
+              <div id="unif-date" class="unif-date font-type">15 January 1902</div>
+              <h3 id="unif-title" class="unif-title">The Recapture of Riyadh</h3>
+              <p id="unif-text" class="unif-text"></p>
+              <div class="unif-nav">
+                <button id="unif-prev" class="unif-btn" aria-label="Previous milestone">← Prev</button>
+                <button id="unif-next" class="unif-btn primary" aria-label="Next milestone">Next →</button>
+              </div>
+              <p class="text-[11px] mt-4 opacity-60 font-type">Tip: use ← → keys while this exhibit is on screen.</p>
+            </div>
+
+            <!-- Map -->
+            <div class="lg:col-span-4 unif-map-col">
+              <div class="map-frame map-frame-sepia">
+                <div class="map-frame-head"><span id="unif-map-title">Territory · 1902</span></div>
+                <div class="map-mount" data-map="unif"></div>
+                <div class="map-info" data-map-info="unif"><p class="map-hint">✦ Tap markers for details.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slider -->
+          <div class="unif-slider">
+            <label for="unif-range" class="sr-only">Milestone</label>
+            <input id="unif-range" class="range range-sepia" type="range" min="0" max="11" step="1" value="0" />
+            <div id="unif-ticks" class="ticks unif-ticks"></div>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-4 mt-12 unif-facts">
+          <div class="reveal"><b class="font-type" data-count="36">0</b><span>years from Riyadh to Dammam No.&nbsp;7</span></div>
+          <div class="reveal" style="--d:.1s"><b class="font-type" data-count="2.15" data-decimals="2" data-suffix="M km²">0</b><span>the area of the unified Kingdom</span></div>
+          <div class="reveal" style="--d:.2s"><b class="font-type" data-count="1938">0</b><span>oil discovered in commercial quantities</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ERA VI — MODERN SAUDI ARABIA ============ -->
+    <section id="era-6" class="era era-modern" data-era="6" data-from="1938" data-to="2030" data-sound="city" data-name="Modern Saudi Arabia">
+      <div class="era-bg" data-parallax="0.3"><div class="bg-img" data-bg="riyadh"></div></div>
+      <div class="era-shade"></div>
+      <div class="neon-grid" aria-hidden="true"></div>
+      <svg class="skyline" data-parallax="0.06" viewBox="0 0 1440 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="sky-fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#00f0ff" stop-opacity=".9" /><stop offset="1" stop-color="#00f0ff" stop-opacity="0" /></linearGradient>
+        </defs>
+        <g fill="none" stroke="url(#sky-fade)" stroke-width="1.6">
+          <path d="M0 260V210h40v-30h30v50h25v-80h35v80h20v-40h30v60" />
+          <path d="M230 260V150h18v-20h14v20h18v110" />
+          <!-- Al Faisaliah-style tower -->
+          <path d="M330 260L372 70L414 260M357 135h30M372 70v-18" /><circle cx="372" cy="118" r="11" />
+          <path d="M440 260V180h40v-25h30v105M520 260V200h40v60" />
+          <!-- Kingdom Centre-style tower -->
+          <path d="M600 260C610 160 625 80 640 30H700C715 80 730 160 740 260" /><path d="M648 30C655 52 685 52 692 30" />
+          <path d="M770 260V140h26v-30h22v150M840 260V190h50v70" />
+          <path d="M910 260V95l22-25 22 25v165" />
+          <path d="M980 260V170h36v-40h28v130M1065 260V210h40v50" />
+          <path d="M1120 260V120h30l10-30 10 30h30v140" />
+          <path d="M1220 260V180h45v80M1280 260V150h20v-25h20v135M1340 260V200h50v-20h50v80" />
+        </g>
+      </svg>
+      <div class="era-bignum" data-parallax="-0.12" aria-hidden="true">2030</div>
+
+      <div class="era-content">
+        <header class="era-head">
+          <p class="era-kicker reveal"><span>Era VI</span>1938 – 2030</p>
+          <h2 class="era-title" data-split>Vision 2030</h2>
+          <p class="era-arabic reveal" lang="ar" dir="rtl">رؤية المملكة ٢٠٣٠</p>
+          <p class="era-intro reveal">From oil wells to giga-projects. After decades of transformation powered by energy, the Kingdom launched Vision 2030 in 2016 — a blueprint to diversify the economy, open to the world, and build places that have never existed before.</p>
+        </header>
+
+        <div class="grid md:grid-cols-3 gap-5 mt-14">
+          <article class="neon-card reveal" style="--accent:#00f0ff">
+            <span class="neon-num">01</span>
+            <h3>A Vibrant Society</h3>
+            <p>Culture, heritage, entertainment and sport — from AlUla's ancient valleys to Riyadh Season.</p>
+          </article>
+          <article class="neon-card reveal" style="--d:.12s;--accent:#00ff9c">
+            <span class="neon-num">02</span>
+            <h3>A Thriving Economy</h3>
+            <p>Growing non-oil sectors such as tourism, technology, mining and logistics to reduce reliance on hydrocarbons.</p>
+          </article>
+          <article class="neon-card reveal" style="--d:.24s;--accent:#ff2bd6">
+            <span class="neon-num">03</span>
+            <h3>An Ambitious Nation</h3>
+            <p>Effective, transparent government and an engaged citizenry building the Kingdom's next chapter.</p>
+          </article>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start mt-16">
+          <div class="lg:col-span-7">
+            <div class="map-frame map-frame-neon reveal-zoom">
+              <div class="map-frame-head">
+                <span>GIGA-PROJECTS · NETWORK</span>
+                <span class="legend"><i class="lg-route"></i>Rail <i class="lg-dot"></i>Project</span>
+              </div>
+              <div class="map-mount" data-map="modern"></div>
+              <div class="map-info" data-map-info="modern"><p class="map-hint">✦ Select a node or project card.</p></div>
+            </div>
+          </div>
+          <div class="lg:col-span-5">
+            <div id="project-list" class="project-list"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
+          <div class="counter reveal"><b data-count="2016">0</b><span>Vision 2030 launched</span></div>
+          <div class="counter reveal" style="--d:.1s"><b data-count="176" data-suffix=" km">0</b><span>Riyadh Metro network, 6 lines</span></div>
+          <div class="counter reveal" style="--d:.2s"><b data-count="2030">0</b><span>World Expo hosted in Riyadh</span></div>
+          <div class="counter reveal" style="--d:.3s"><b data-count="2034">0</b><span>FIFA World Cup host</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER / EPILOGUE ============ -->
+  <footer class="epilogue">
+    <div class="max-w-3xl mx-auto text-center px-6">
+      <svg class="logo-star mx-auto mb-6 w-10 h-10 text-gold" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5"><rect x="24" y="24" width="52" height="52" /><rect x="24" y="24" width="52" height="52" transform="rotate(45 50 50)" /><circle cx="50" cy="50" r="9" /></g></svg>
+      <p class="font-arabic text-3xl text-gold/90 mb-3" lang="ar" dir="rtl">والرحلة مستمرة</p>
+      <h2 class="font-display text-2xl md:text-4xl tracking-wide text-sand-50">The journey continues.</h2>
+      <p class="mt-4 text-sand-200/80 font-serif text-lg">From the incense caravans to the cities of tomorrow, the story of the peninsula is still being written.</p>
+      <a href="#top" class="btn-ghost mt-8 inline-flex">↺ Travel back to the beginning</a>
+      <p class="mt-12 text-xs text-sand-300/50 leading-relaxed">Maps are stylised and approximate, for illustration only. Ambient soundscapes are synthesised live in your browser with the Web Audio API. Photography via Unsplash. Built with HTML, Tailwind CSS and vanilla JavaScript.</p>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
